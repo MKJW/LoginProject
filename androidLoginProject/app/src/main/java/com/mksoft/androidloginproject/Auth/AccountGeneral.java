@@ -1,4 +1,4 @@
-package com.mksoft.androidloginproject;
+package com.mksoft.androidloginproject.Auth;
 
 public class AccountGeneral {
     /**

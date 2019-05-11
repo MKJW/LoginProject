@@ -1,4 +1,4 @@
-package com.mksoft.androidloginproject;
+package com.mksoft.androidloginproject.Auth;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.mksoft.androidloginproject.Activity.MainActivity;
+
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
-import static com.mksoft.androidloginproject.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
-import static com.mksoft.androidloginproject.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS_LABEL;
-import static com.mksoft.androidloginproject.AccountGeneral.AUTHTOKEN_TYPE_READ_ONLY;
-import static com.mksoft.androidloginproject.AccountGeneral.AUTHTOKEN_TYPE_READ_ONLY_LABEL;
+import static com.mksoft.androidloginproject.Auth.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
+import static com.mksoft.androidloginproject.Auth.AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS_LABEL;
+import static com.mksoft.androidloginproject.Auth.AccountGeneral.AUTHTOKEN_TYPE_READ_ONLY;
+import static com.mksoft.androidloginproject.Auth.AccountGeneral.AUTHTOKEN_TYPE_READ_ONLY_LABEL;
 
 public class CMKAuthenticator extends AbstractAccountAuthenticator {
     private final Context mContext;
@@ -46,7 +48,7 @@ public class CMKAuthenticator extends AbstractAccountAuthenticator {
         //심은 인텐트를 번들에 넣어서 반환해 주자.
 
         return bundle;
-    }
+    }//계정 추가를 위한 오버라이드?
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
