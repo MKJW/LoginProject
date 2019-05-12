@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.mksoft.androidloginproject.Activity.LoginActivity;
 import com.mksoft.androidloginproject.Activity.MainActivity;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
@@ -37,9 +38,9 @@ public class CMKAuthenticator extends AbstractAccountAuthenticator {
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
         Log.d("CMK", "addAccont");
         final Intent intent = new Intent(mContext, CMKAuthenticator.class);
-        intent.putExtra(MainActivity.ARG_ACCOUNT_TYPE, accountType);
-        intent.putExtra(MainActivity.ARG_AUTH_TYPE, authTokenType);
-        intent.putExtra(MainActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
+        intent.putExtra(LoginActivity.ARG_ACCOUNT_TYPE, accountType);
+        intent.putExtra(LoginActivity.ARG_AUTH_TYPE, authTokenType);
+        intent.putExtra(LoginActivity.ARG_IS_ADDING_NEW_ACCOUNT, true);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
         //인텐트에 심고
 
@@ -73,6 +74,7 @@ public class CMKAuthenticator extends AbstractAccountAuthenticator {
             final String password = accountManager.getPassword(account);
             if(password != null){
                 //다시 서버에 권한토큰 요청
+                LoginActivity.userReSignIn(account.name, password, authTokenType);
             }
         }
 
@@ -85,9 +87,9 @@ public class CMKAuthenticator extends AbstractAccountAuthenticator {
         }//권한 받았으면 잘 정리하여 번들로 전달
         final Intent intent = new Intent(mContext, MainActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        intent.putExtra(MainActivity.ARG_ACCOUNT_TYPE, account.type);
-        intent.putExtra(MainActivity.ARG_AUTH_TYPE, authTokenType);
-        intent.putExtra(MainActivity.ARG_ACCOUNT_NAME, account.name);
+        intent.putExtra(LoginActivity.ARG_ACCOUNT_TYPE, account.type);
+        intent.putExtra(LoginActivity.ARG_AUTH_TYPE, authTokenType);
+        intent.putExtra(LoginActivity.ARG_ACCOUNT_NAME, account.name);
         final Bundle bundle = new Bundle();
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;

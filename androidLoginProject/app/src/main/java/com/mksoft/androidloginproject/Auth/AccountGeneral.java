@@ -19,6 +19,5 @@ public class AccountGeneral {
 
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS = "Full access";
     public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Full access to an CMK account";
-    //권한 타입 설정
 
 }

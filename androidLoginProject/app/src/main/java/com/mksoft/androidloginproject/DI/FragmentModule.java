@@ -3,8 +3,8 @@ package com.mksoft.androidloginproject.DI;
 
 
 
-import com.mksoft.androidloginproject.Activity.Fragment.LoginFragment;
-import com.mksoft.androidloginproject.Activity.Fragment.SignUpFragment;
+import com.mksoft.androidloginproject.Activity.LoginActivity;
+import com.mksoft.androidloginproject.Activity.SignUpActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -15,11 +15,7 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class FragmentModule {
-    @ContributesAndroidInjector
-    abstract SignUpFragment contributeSignUpFragment();
 
-    @ContributesAndroidInjector
-    abstract LoginFragment contributeLoginFragment();
 
 
 

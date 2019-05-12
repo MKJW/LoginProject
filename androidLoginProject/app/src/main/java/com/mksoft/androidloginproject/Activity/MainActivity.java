@@ -1,9 +1,8 @@
 package com.mksoft.androidloginproject.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.FrameLayout;
 
-import com.mksoft.androidloginproject.Activity.Fragment.LoginFragment;
 import com.mksoft.androidloginproject.R;
 
 import javax.inject.Inject;
@@ -16,16 +15,8 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
-    public final static String ARG_ACCOUNT_TYPE = "ACCOUNT_TYPE";
-    public final static String ARG_AUTH_TYPE = "AUTH_TYPE";
-    public final static String ARG_ACCOUNT_NAME = "ACCOUNT_NAME";
-    public final static String ARG_IS_ADDING_NEW_ACCOUNT = "IS_ADDING_ACCOUNT";
-
     public static MainActivity mainActivity;
 
-    FrameLayout mainContainer;
-    HideKeyboard hideKeyboard;
-    BackPressCloseHandler backPressCloseHandler;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -37,7 +28,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         setContentView(R.layout.activity_main);
         this.configureDagger();
         mainActivity = this;
-        init();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        //로그인 인텐트 소환.
     }
 
     @Override
@@ -48,37 +41,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         AndroidInjection.inject(this);
     }
 
-    private void init(){
-        mainContainer = findViewById(R.id.mainContainer);
-        backPressCloseHandler =new BackPressCloseHandler(this);
-        hideKeyboard = new HideKeyboard(this);
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, new LoginFragment()).commit();
-    }//키보드 숨기기 메인컨테이너 뒤로가기 버튼 초기화
-    public HideKeyboard getHideKeyboard(){
-        return hideKeyboard;
-    }
 
 
-    /////뒤로가기
-    public interface onKeyBackPressedListener{
-        void onBackKey();
-    }
-    private onKeyBackPressedListener mOnKeyBackPressedListener;
-    public void setOnKeyBackPressedListener(onKeyBackPressedListener listener){
-        mOnKeyBackPressedListener = listener;
-    }
 
-    @Override
-    public void onBackPressed() {
-        if(mOnKeyBackPressedListener != null) {
-            mOnKeyBackPressedListener.onBackKey();
-        }else{
-            if(getSupportFragmentManager().getBackStackEntryCount() == 0){
-                backPressCloseHandler.onBackPressed();
-            }
-            else{
-                super.onBackPressed();
-            }
-        }
-    }
 }
