@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.mksoft.androidloginproject.Activity.LoginActivity;
-import com.mksoft.androidloginproject.Activity.SignUpActivity;
 import com.mksoft.androidloginproject.Activity.MainActivity;
+import com.mksoft.androidloginproject.R;
 import com.mksoft.androidloginproject.User;
 
 import javax.inject.Inject;
@@ -18,10 +17,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.mksoft.androidloginproject.Activity.LoginActivity.PARAM_USER_PASS;
 
 @Singleton
 public class LoginRepo {
+    private static final String siteURL = "https://www.googleapis.com/";
+    private static String code = MainActivity.Authcode;
     private final LoginService webservice;
     @Inject
     public LoginRepo(LoginService webservice) {
@@ -29,67 +29,35 @@ public class LoginRepo {
         this.webservice = webservice;
 
     }
+    public void getAccessToken(String AUTHORIZATION_CODE, String CLIENT_ID, String REDIRECT_URI, String GRANT_TYPE){
+        final Call<OAuthToken> accessTokenCall = webservice.getAccessToken(
+                AUTHORIZATION_CODE,
+                CLIENT_ID,
+                REDIRECT_URI,
+                GRANT_TYPE
+        );
 
-    public void userSignUp(final String id, final String pw, final String email, final SignUpActivity signUpFragment){
-        Call<String>call = webservice.userSignUp(id, pw, email);
-        call.enqueue(new Callback<String>() {
+        accessTokenCall.enqueue(new Callback<OAuthToken>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if(response.isSuccessful()){
-                    if(response.body() != null){
-                        String authtoken = response.body();
-                        Bundle data = new Bundle();
+            public void onResponse(Call<OAuthToken> call, Response<OAuthToken> response) {
+                MainActivity.mainActivity.Authcode = response.body().getAccessToken();
+                MainActivity.mainActivity.Tokentype = response.body().getTokenType();
+                MainActivity.mainActivity.Expiresin = response.body().getExpiresIn();
+                MainActivity.mainActivity.Refreshtoken = response.body().getRefreshToken();
+                MainActivity.mainActivity.ExpiryTime = System.currentTimeMillis() + (MainActivity.mainActivity.Expiresin * 1000);
 
-                        data.putString(AccountManager.KEY_ACCOUNT_NAME, id);
-                        data.putString(AccountManager.KEY_ACCOUNT_TYPE, signUpFragment.getmAccountType());
-                        data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
-                        data.putString(PARAM_USER_PASS, pw);
-                        final Intent res = new Intent();
-                        res.putExtras(data);
-                        signUpFragment.resultSignIn(res);
-                    }else{
-                        Toast.makeText(MainActivity.mainActivity, "회원가입 실패", Toast.LENGTH_SHORT).show();
+                MainActivity.mainActivity.saveData();
 
-                    }
 
-                }
+
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.d("userSignUpError", t.toString());
+            public void onFailure(Call<OAuthToken> call, Throwable t) {
+                Toast.makeText(MainActivity.mainActivity.getApplicationContext(), "accesss fail",Toast.LENGTH_LONG).show();
+
             }
         });
     }
-    public void userSignIn(final String id, final String pw, final LoginActivity loginFragment, final String accountType){
-        Call<User> call = webservice.userSignIn(id, pw);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful() && response.body() != null){
-                    String authtoken = null;
-                    Bundle data = new Bundle();
-                    authtoken = response.body().sessionToken;
-                    data.putString(AccountManager.KEY_ACCOUNT_NAME, id);
-                    data.putString(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-                    data.putString(AccountManager.KEY_AUTHTOKEN, authtoken);
-                    data.putString(PARAM_USER_PASS, pw);
-                    final Intent res = new Intent();
-                    res.putExtras(data);
-                    loginFragment.finishLogin(res);
 
-
-                }else{
-                    Toast.makeText(MainActivity.mainActivity, "로그인 실패", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.d("userSignInError", t.toString());
-            }
-        });
-
-    }
 }

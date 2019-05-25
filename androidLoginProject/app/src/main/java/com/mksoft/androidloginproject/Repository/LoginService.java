@@ -13,16 +13,18 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface LoginService {
-    @POST("/user")
-    Call<String> userSignUp(
-            @Field("userID") String user,
-            @Field("password") String password,
-            @Field("email") String email
-    );
+    // @Headers("Accept: application/json")
 
-    @GET("/login")
-    Call<User> userSignIn(
-            @Field("userID") String user,
-            @Field("password") String password
+    /**
+     * The call to request a token
+     */
+
+    @POST("oauth2/v4/token")
+    @FormUrlEncoded
+    Call<OAuthToken> getAccessToken(
+            @Field("code") String code,
+            @Field("client_id") String client_id,
+            @Field("redirect_uri") String redirect_uri,
+            @Field("grant_type") String grant_type
     );
 }

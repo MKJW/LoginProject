@@ -14,10 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".Auth.CMKAuthenticatorService"
-            android:enabled="true"
-            android:exported="true"></service>
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="com.apppackage.name"/>
+        </intent-filter>
 
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
