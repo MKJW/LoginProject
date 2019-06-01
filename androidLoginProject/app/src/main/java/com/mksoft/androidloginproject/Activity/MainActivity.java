@@ -10,9 +10,12 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mksoft.androidloginproject.R;
+import com.mksoft.androidloginproject.Repository.LoginRepo;
 import com.mksoft.androidloginproject.Repository.OAuthToken;
 
 import org.json.JSONException;
@@ -54,12 +57,13 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     public static String Tokentype;
     public static String Refreshtoken;
     public static Long Expiresin, ExpiryTime;
-
-    Button authButton;
-
+    EditText idTextView;
+    EditText pwTextVeiw;
+    Button loginButton;
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
-
+    @Inject
+    LoginRepo loginRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,20 +76,23 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     private void init(){
-        authButton = findViewById(R.id.authButton);
-        authButton.setOnClickListener(new View.OnClickListener() {
+        idTextView = findViewById(R.id.loginProjectLoginPageIdEditText);
+        pwTextVeiw = findViewById(R.id.loginProjectLoginPagePwEditText);
+        loginButton = findViewById(R.id.loginProjectLoginPageLoginButton);
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("https://accounts.google.com/o/oauth2/v2/auth" + "?client_id=" + CLIENT_ID + "&response_type=" + CODE + "&redirect_uri=" + REDIRECT_URI + "&scope=" + OAUTH_SCOPE));
-
-                if(intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
+                if(!TextUtils.isEmpty(idTextView.getText().toString()) &&!TextUtils.isEmpty(pwTextVeiw.getText().toString())){
+                    loginRepo.login("mkjw", "password", "password");
                 }
             }
         });
-        loadData();
+        //기본 토큰 받기 테스트
+
+
+
+        loadData();//토큰 불러오기
 
         if(AUTHORIZATION_CODE == null || AUTHORIZATION_CODE.equals("")) {
 

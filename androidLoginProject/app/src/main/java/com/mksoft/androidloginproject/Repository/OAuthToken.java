@@ -16,7 +16,9 @@ public class OAuthToken {
     @SerializedName("refresh_token")
     @Expose
     private String refreshToken;
-
+    @SerializedName("scope")
+    @Expose
+    private String scope;
     public String getAccessToken() {
         return accessToken;
     }

@@ -30,7 +30,7 @@ public class AppModule {
 
 // --- NETWORK INJECTION ---
 
-    private static String BASE_URL = "https://objproject-cd7af.firebaseio.com";//server
+    private static String BASE_URL = "http://116.44.253.75:8888";//server
 
     @Provides
     Gson provideGson() { return new GsonBuilder().create(); }
